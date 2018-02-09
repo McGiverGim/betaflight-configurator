@@ -15,6 +15,8 @@ i18n.init = function(cb) {
 
     getStoredUserLocale(function(userLanguage){
 
+        userLanguage = 'ach';
+        
         i18next
             .use(i18nextXHRBackend)
             .init({

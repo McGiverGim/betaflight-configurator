@@ -18,7 +18,8 @@
         }
     },
     "permissions": [
-        "https://maps.googleapis.com/*",    
+        "https://cdn.crowdin.com/*",
+        "https://maps.googleapis.com/*",
         "https://*.github.com/",
         "https://*.githubusercontent.com/",
         "http://*.baseflight.net/",
