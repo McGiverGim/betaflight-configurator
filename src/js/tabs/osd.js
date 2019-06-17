@@ -1816,23 +1816,28 @@ OSD.msp = {
             if (expectedStatsCount != OSD.constants.STATISTIC_FIELDS.length) {
                 console.error("Firmware is transmitting a different number of statistics (" + expectedStatsCount + ") to what the configurator is expecting (" + OSD.constants.STATISTIC_FIELDS.length + ")");
             }
-            while (view.offset < view.byteLength && d.stat_items.length < OSD.constants.STATISTIC_FIELDS.length) {
-                var v = view.readU8();
-                var j = d.stat_items.length;
-                var c = OSD.constants.STATISTIC_FIELDS[j];
-                d.stat_items.push({
-                    name: c.name,
-                    text: c.text,
-                    desc: c.desc,
-                    index: j,
-                    enabled: v === 1
-                });
-                expectedStatsCount--;
-            }
-            // Read all the data for any statistics we don't know about
-            while (expectedStatsCount > 0) {
-                view.readU8();
-                expectedStatsCount--;
+            
+            for (var i = 0; i < expectedStatsCount; i++) {
+
+                let v = view.readU8();
+
+                // Known warning field
+                if (i < OSD.constants.STATISTIC_FIELDS.length) {
+
+                    let c = OSD.constants.STATISTIC_FIELDS[i];
+                    d.stat_items.push({
+                        name: c.name,
+                        text: c.text,
+                        desc: c.desc,
+                        index: i,
+                        enabled: v === 1
+                    });
+
+                // Read all the data for any statistics we don't know about
+                } else {
+                    let statisticNumber = i - OSD.constants.STATISTIC_FIELDS.length + 1;
+                    d.stat_items.push({name: 'UNKNOWN', text: ['osdTextStatUnknown', statisticNumber], desc: 'osdDescStatUnknown', index: i, enabled: v === 1 });
+                }
             }
 
             // Parse configurable timers
@@ -2103,16 +2108,20 @@ TABS.osd.initialize = function (callback) {
         }
 
         function insertOrdered(fieldList, field) {
-            let added = false;
-            fieldList.children().each(function() {
-                if ($(this).text().localeCompare(field.text(), i18n.getCurrentLocale(), { sensitivity: 'base' }) > 0) {
-                    $(this).before(field);
-                    added = true;
-                    return false;
-                }
-            });
-            if(!added) {
+            if (field.name == 'UNKNOWN') {
                 fieldList.append(field);
+            } else {
+                let added = false;
+                fieldList.children().each(function() {
+                    if ($(this).text().localeCompare(field.text(), i18n.getCurrentLocale(), { sensitivity: 'base' }) > 0) {
+                        $(this).before(field);
+                        added = true;
+                        return false;
+                    }
+                });
+                if(!added) {
+                    fieldList.append(field);
+                }
             }
         }
 
@@ -2300,6 +2309,7 @@ TABS.osd.initialize = function (callback) {
                                 );
                                 $field.append('<label for="' + field.name + '" class="char-label">' + titleizeField(field) + '</label>');
 
+                                // Insert in alphabetical order, with unknown fields at the end
                                 insertOrdered($statsFields, $field);
                             }
 
@@ -2337,11 +2347,8 @@ TABS.osd.initialize = function (callback) {
                                 $field.append('<label for="' + field.name + '" class="char-label">' + finalFieldName + '</label>');
 
                                 // Insert in alphabetical order, with unknown fields at the end
-                                if (field.name == 'UNKNOWN') {
-                                    $warningFields.append($field);
-                                } else {
-                                    insertOrdered($warningFields, $field);
-                                }
+                                insertOrdered($warningFields, $field);
+
                             }
                         }
                     }
@@ -2471,11 +2478,8 @@ TABS.osd.initialize = function (callback) {
                         }
 
                         // Insert in alphabetical order, with unknown fields at the end
-                        if (field.name == OSD.constants.UNKNOWN_DISPLAY_FIELD.name) {
-                            $displayFields.append($field);
-                        } else {
-                            insertOrdered($displayFields, $field);
-                        }
+                        insertOrdered($displayFields, $field);
+
                     }
 
                     GUI.switchery();

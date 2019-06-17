@@ -4424,6 +4424,13 @@
     "osdDescStatTotalFlightDistance": {
         "message": "Total distance traveled"
     },
+    "osdTextStatUnknown": {
+        "message": "Unknown $1",
+        "description": "One of the statistics that can be shown at the end of the flight in the OSD"
+    },
+    "osdDescStatUnknown": {
+        "message": "Unknown statistic (details to be added in a future release)"
+    },
 
     "osdDescribeFontVersion1": {
         "message": "Font version: 1 (Betaflight 4.0 or older)"
