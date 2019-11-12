@@ -155,6 +155,10 @@ MspHelper.prototype.process_data = function(dataHandler) {
                     MOTOR_TELEMETRY_DATA.voltage[i] = data.readU16();          // 0.01V per unit
                     MOTOR_TELEMETRY_DATA.current[i] = data.readU16();          // 0.01A per unit
                     MOTOR_TELEMETRY_DATA.consumption[i] = data.readU16();      // mAh
+                    
+                    if (semver.gte(CONFIG.apiVersion, "1.43.0")) {
+                        MOTOR_TELEMETRY_DATA.kv[i] = data.readU16();
+                    }
                 }
                 break;
             case MSPCodes.MSP_RC:
