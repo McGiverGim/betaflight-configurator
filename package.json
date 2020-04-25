@@ -1,9 +1,8 @@
 {
   "name": "betaflight-configurator",
   "description": "Crossplatform configuration tool for Betaflight flight control system.",
-  "version": "10.7.0",
-  "main": "main_nwjs.html",
-  "bg-script": "js/eventPage.js",
+  "version": "10.7.0",  
+  "main": "node_main.js",
   "default_locale": "en",
   "scripts": {
     "start": "gulp debug",
