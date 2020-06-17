@@ -524,6 +524,15 @@ function onConnect() {
     var sensor_state = $('#sensor-status');
     sensor_state.show();
 
+    // Adjust some sizes to the current language, header sensors
+    TextFill("#sensor-status > ul > li > div ", {
+        "widthOnly": true,
+        "allowOverflow" : true,
+        "minFontPixels": 4,
+        "maxFontPixels": 12,
+    });
+    
+
     var port_picker = $('#portsinput');
     port_picker.hide();
 
