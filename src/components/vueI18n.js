@@ -1,4 +1,5 @@
 import Vue from "vue";
+import i18next from "i18next";
 import VueI18Next from "@panter/vue-i18next";
 
 Vue.use(VueI18Next);
