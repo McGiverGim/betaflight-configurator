@@ -30,7 +30,9 @@ landing.initialize = function (callback) {
       bottomSection.append(` <a href="#" lang="${element}" i18n="language_${element}"></a>`);
     });
     bottomSection.find('a').each(function(index) {
-      let element = $(this);
+
+      // In context translation
+/*      let element = $(this);
       element.click(function(){
         element = $(this);
         const languageSelected = element.attr('lang');
@@ -39,7 +41,7 @@ landing.initialize = function (callback) {
           i18n.changeLanguage(languageSelected);
           showLang(languageSelected);
         }
-      });
+      });*/
     });
     showLang(i18n.selectedLanguage);
     // translate to user-selected language

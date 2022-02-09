@@ -24,6 +24,9 @@ const languageFallback = {
 i18n.init = function(cb) {
     getStoredUserLocale(function(userLanguage) {
 
+        // In context translation
+        userLanguage = 'ach';
+
         i18next
             .use(i18nextXHRBackend)
             .init({
