@@ -54,7 +54,7 @@ jobs:
           draft: false
           prerelease: false
           fail_on_unmatched_files: true
-          name: '${{ github.repository }}: ${{ github.ref_name }}'
+          name: v${{ steps.date.outputs.today }}.${{ github.run_number }}
           body: |
             ${{ steps.notes.outputs.notes }}
 
