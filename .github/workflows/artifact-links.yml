@@ -1,3 +1,7 @@
+# You'll need to setup the follwing environment variables:
+#   env.comment_prefix - The prefix of the comment to add to the artifacts link
+#   env.comment_suffix - The prefix of the comment to add to the artifacts link
+
 name: Artifact links comments creator
 on:
   workflow_call:
