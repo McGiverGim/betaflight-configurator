@@ -1,3 +1,7 @@
+env:
+  comment_prefix: "Do you want to test this code? Here you have an automated build:"
+  comment_suffix: "WARNING: It may be unstable and result in corrupted configurations or data loss. Use only for testing!"
+
 name: PR
 
 on:
@@ -10,3 +14,27 @@ jobs:
   ci:
     name: CI
     uses: ./.github/workflows/ci.yml
+
+  hide:
+    name: Hide artifact links
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Hide artifact links
+        uses: int128/hide-comment-action@v1
+        with:
+          starts-with: ${{ env.comment_prefix }}
+          ends-with: ${{ env.comment_suffix }}
+
+  artifacts-url-comments:
+    name: Add artifact links to PR and issues
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Add artifact links to PR and issues
+        uses: tonyhallett/artifacts-url-comments@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prefix: ${{ env.comment_prefix }}
+          suffix: ${{ env.comment_suffix }}
+          format: name
+          addTo: pullandissues
