@@ -1,13 +1,10 @@
+# You'll need to setup the follwing environment variables:
+#   env.comment_prefix - The prefix of the comment to add to the artifacts link
+#   env.comment_suffix - The prefix of the comment to add to the artifacts link
+
 name: Artifact links comments creator
 on:
   workflow_call:
-    inputs:
-      comment_prefix:
-        required: true
-        type: string
-      comment_suffix:
-        required: true
-        type: string
 
 jobs:
   artifacts-url-comments:
@@ -19,7 +16,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          prefix: ${{ inputs.comment_prefix }}
-          suffix: ${{ inputs.comment_suffix }}
+          prefix: ${{ env.comment_prefix }}
+          suffix: ${{ env.comment_suffix }}
           format: name
           addTo: pullandissues
