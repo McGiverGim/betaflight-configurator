@@ -3,6 +3,7 @@ name: PR
 on:
   pull_request:
     branches:
+      - hide_artifact_links
       - master
       - '*-maintenance'
 
