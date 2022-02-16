@@ -26,7 +26,7 @@ jobs:
         with:
           starts-with: ${{ env.comment_prefix }}
           ends-with: ${{ env.comment_suffix }}
-      - uses: ./.github/workflows/artifacts-links.yml
+      - uses: ./.github/workflows/artifact-links.yml
         with:
           comment_prefix: ${{ env.comment_prefix }}
           comment_suffix: ${{ env.comment_suffix }}
