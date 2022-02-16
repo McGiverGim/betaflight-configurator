@@ -1,6 +1,6 @@
 env:
   comment_prefix: "Do you want to test this code? Here you have an automated build:"
-  comment_suffix: "WARNING: It may be unstable and result in corrupted configurations or data loss. Use only for testing!"
+  comment_sufix: "WARNING: It may be unstable and result in corrupted configurations or data loss. Use only for testing!"
 
 name: PR
 
@@ -15,23 +15,21 @@ jobs:
     name: CI
     uses: ./.github/workflows/ci.yml
 
-  artifact-links:
+  hide-artifact-links:
+    name: Hide/show artifact links in PR comments
     needs: ci
-    name: Update PR with artifact links
     runs-on: ubuntu-20.04
     steps:
-      - name: Hide old artifact links
+      - name: Hide artifact links
         uses: int128/hide-comment-action@v1
         with:
           starts-with: ${{ env.comment_prefix }}
           ends-with: ${{ env.comment_suffix }}
 
-      - name: Add new artifact links to PR and issues
-        uses: tonyhallett/artifacts-url-comments@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          prefix: ${{ env.comment_prefix }}
-          suffix: ${{ env.comment_suffix }}
-          format: name
-          addTo: pullandissues
+  add-artifact-links:
+    needs: hide-artifact-links    
+    uses: ./.github/workflows/artifact-links.yml
+    with:
+      comment_prefix: ${{ env.comment_prefix }}
+      comment_suffix: ${{ env.comment_suffix }}
+      
