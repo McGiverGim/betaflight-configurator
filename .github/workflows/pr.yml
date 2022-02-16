@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - master
+      - hide_artifact_links
       - '*-maintenance'
 
 jobs:
