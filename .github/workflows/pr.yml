@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - master
+      - abort_build_pr
       - '*-maintenance'
 
 jobs:
