@@ -28,7 +28,7 @@ jobs:
         upload_translations: false
 
         download_translations: true
-        crowdin_branch_name: master
+        crowdin_branch_name: ${{ github.ref_name }}
         download_translations_args: '-l ca -l da -l de -l es-ES -l eu -l fr -l gl -l hr -l hu -l id -l it -l ja -l ko -l lv -l nl -l pt-PT -l pt-BR -l pl -l ru -l sv-SE -l zh-CN -l zh-TW'
         localization_branch_name: update_translations_crowdin
         push_translations: true
