@@ -30,10 +30,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: yarn
-
-      - name: List cache folder
-        run: ls cache/
 
       - run: yarn install --immutable --immutable-cache --check-cache
 
