@@ -1,36 +1,39 @@
 'use strict';
 
-const child_process = require('child_process');
-const fs = require('fs');
-const fse = require('fs-extra');
-const https = require('follow-redirects').https;
-const path = require('path');
+import child_process from 'child_process';
+import fs from 'fs';
+import fse from 'fs-extra';
+import https from 'follow-redirects';
+import path from 'path';
 
-const zip = require('gulp-zip');
-const del = require('del');
-const NwBuilder = require('nw-builder');
-const innoSetup = require('@quanle94/innosetup');
-const deb = require('gulp-debian');
-const buildRpm = require('rpm-builder');
-const commandExistsSync = require('command-exists').sync;
-const targz = require('targz');
+import zip from 'gulp-zip';
+import del from 'del';
+import nwbuild from 'nw-builder';
+import innoSetup from '@quanle94/innosetup';
+import deb from 'gulp-debian';
+import buildRpm from 'rpm-builder';
+//import commandExistsSync from 'command-exists'.sync;
+import commandExistsSync from 'command-exists';
+import targz from 'targz';
 
-const gulp = require('gulp');
-const rollup = require('rollup');
-const yarn = require("gulp-yarn");
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
-const jeditor = require("gulp-json-editor");
-const xmlTransformer = require("gulp-xml-transformer");
-const os = require('os');
-const git = require('simple-git')();
-const source = require('vinyl-source-stream');
-const stream = require('stream');
-const prompt = require('gulp-prompt');
-const less = require('gulp-less');
-const sourcemaps = require('gulp-sourcemaps');
+import gulp from 'gulp';
+import { rollup } from 'rollup';
+import yarn from 'gulp-yarn';
+import rename from 'gulp-rename';
+import replace from 'gulp-replace';
+import jeditor from 'gulp-json-editor';
+import xmlTransformer from 'gulp-xml-transformer';
+import os from 'os';
+import { simpleGit } from 'simple-git';
+import source from 'vinyl-source-stream';
+import stream from 'stream';
+import prompt from 'gulp-prompt';
+import less from 'gulp-less';
+import sourcemaps from 'gulp-sourcemaps';
 
-const cordova = require("cordova-lib").cordova;
+import cordova from 'cordova-lib';
+
+import appdmg from './gulp-appdmg';
 
 const DIST_DIR = './dist/';
 const APPS_DIR = './apps/';
@@ -617,7 +620,7 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
 
 function buildNWApps(platforms, flavor, dir, done) {
     if (platforms.length > 0) {
-        const builder = new NwBuilder(Object.assign({
+        const builder = new nwbuild(Object.assign({
             buildDir: dir,
             platforms,
             flavor,
@@ -639,9 +642,9 @@ function buildNWApps(platforms, flavor, dir, done) {
 
 function getGitRevision(done, callback, isReleaseBuild) {
     let gitRevision = 'norevision';
-    git.diff([ '--shortstat' ], function (err1, diff) {
+    simpleGit().diff([ '--shortstat' ], function (err1, diff) {
         if (!err1 && !diff) {
-            git.log([ '-1', '--pretty=format:%h' ], function (err2, rev) {
+            simpleGit().log([ '-1', '--pretty=format:%h' ], function (err2, rev) {
                 if (!err2) {
                     gitRevision = rev.latest.hash;
                 }
@@ -833,7 +836,6 @@ function getLinuxPackageArch(type, arch) {
 }
 // Create distribution package for macOS platform
 function release_osx64(appDirectory) {
-    const appdmg = require('./gulp-appdmg');
 
     // The appdmg does not generate the folder correctly, manually
     createDirIfNotExists(RELEASE_DIR);
