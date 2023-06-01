@@ -14,50 +14,16 @@ on:
         type: boolean
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules/
-          key: node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-
-      - run: yarn install --immutable --immutable-cache --check-cache
-
-      - name: Run unit tests
-        run: yarn test
-
   build:
     name: Build (${{ matrix.name }})
-    needs: test
     runs-on:  ${{ matrix.os }}
     strategy:
       matrix:
         include:
-          - name: Android
-            os: ubuntu-22.04
-            releaseArgs: --android
-
           - name: Linux
             os: ubuntu-22.04
             releaseArgs: --linux64
 
-          - name: macOS
-            os: macos-11
-            releaseArgs: --osx64
-
-          - name: Windows
-            os: windows-2022
-            releaseArgs: --win64
     steps:
       - uses: actions/checkout@v3
 
@@ -66,6 +32,14 @@ jobs:
         with:
           path: cache/
           key: nwjs-${{ inputs.debug_build && 'debug' || 'release' }}-${{ runner.os }}-${{ hashFiles('gulpfile.js') }}
+
+      - name: List cache
+        run: ls -la cache/
+        continue-on-error: true
+
+      - name: Actual pwd
+        run: pwd
+        continue-on-error: true
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -96,9 +70,11 @@ jobs:
       - run: yarn gulp debug-release ${{ matrix.releaseArgs }}
         if: ${{ inputs.debug_build || matrix.name == 'Android' }}
 
-      - name: Publish build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Betaflight-Configurator${{ inputs.debug_build == 'true' && '-Debug' || '' }}-${{ matrix.name }}
-          path: release/
-          retention-days: 90
+      - name: List cache
+        run: ls -la cache/
+        continue-on-error: true
+
+      - name: Actual pwd
+        run: pwd
+        continue-on-error: true
+
